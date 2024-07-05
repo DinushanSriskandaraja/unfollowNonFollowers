@@ -57,7 +57,7 @@ def open_profiles_in_browser(usernames):
 
 if __name__ == "__main__":
     option = input(
-        "Please choose an option:\n1. Identify followers who are not followed by you.\n2. Identify users you are following who are not following you back.\nEnter your choice (1 or 2): ")
+        "Please choose an option:\n1. Identify followers who are not followed  back by you.\n2. Identify users you are following who are not following you back.\nEnter your choice (1 or 2): ")
 
     followers_set = get_usernames_set('followers_1.html')
     following_set = get_usernames_set('following.html')
@@ -66,6 +66,15 @@ if __name__ == "__main__":
 
     if result_set is not None:
         display_usernames(result_set, message)
+
+        if len(result_set) > 20:
+            print(
+                "\033[1;31mWarning: The list contains more than 20 users. Opening all profiles at once might cause your browser or device to hang.\033[0m")
+            confirm_open = input(
+                "Are you sure you want to open all profiles in your browser? (yes/no): ").strip().lower()
+            if confirm_open != "yes":
+                print("Profiles will not be opened in the browser.")
+                exit()
 
         open_in_browser = input("Would you like to open these profiles in your browser? (yes/no): ").strip().lower()
         if open_in_browser == "yes":
