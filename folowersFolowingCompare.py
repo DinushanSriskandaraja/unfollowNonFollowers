@@ -1,4 +1,6 @@
+import webbrowser
 from bs4 import BeautifulSoup
+
 
 def read_html_file(file_path):
     try:
@@ -11,44 +13,53 @@ def read_html_file(file_path):
         print(f"Error reading file {file_path}: {e}")
         return None
 
+
 def extract_usernames(html_content):
     if not html_content:
-        return [], 0
+        return []
     soup = BeautifulSoup(html_content, 'html.parser')
-    usernames = [a_tag.text.strip() for a_tag in soup.find_all('a', href=True)]
-    return usernames, len(usernames)
+    return [a_tag.text.strip() for a_tag in soup.find_all('a', href=True)]
 
-def compare_lists(followers_file, following_file):
+
+def compare_lists(followers_file, following_file, option):
     followers_content = read_html_file(followers_file)
     following_content = read_html_file(following_file)
 
     if followers_content is None or following_content is None:
         return
 
-    followers_usernames, followers_count = extract_usernames(followers_content)
-    following_usernames, following_count = extract_usernames(following_content)
-
-    print(f"Followers count: {followers_count}")
-    print(f"Following count: {following_count}")
+    followers_usernames = extract_usernames(followers_content)
+    following_usernames = extract_usernames(following_content)
 
     followers_set = set(followers_usernames)
     following_set = set(following_usernames)
-    followers_not_following = followers_set - following_set
-    following_not_followers = following_set - followers_set
 
-    print("Followers not following back:")
-    count = 0
-    for user in followers_not_following:
-        print(user)
-        count += 1
-    print(f"Followers not following back: {count}")
+    if option == "1":
+        # Followers not following back
+        result_set = followers_set - following_set
+        message = "Followers not following back:"
+    elif option == "2":
+        # Following not followers
+        result_set = following_set - followers_set
+        message = "Following not followers:"
+    else:
+        print("Invalid option selected.")
+        return
 
-    print("\nFollowing not followers:")
-    count = 0
-    for user in following_not_followers:
+    print(message)
+    for user in result_set:
         print(user)
-        count += 1
-    print(f"Following count: {count}")
+    print(f"Count: {len(result_set)}")
+
+    return list(result_set)
+
 
 if __name__ == "__main__":
-    compare_lists('followers_1.html', 'following.html')
+    option = input("Please choose an option:\n1. Identify followers who are not followed by you.\n2. Identify users you are following who are not following you back.\nEnter your choice (1 or 2): ")
+    result_set = compare_lists('followers_1.html', 'following.html', option)
+
+    if result_set:
+        open_in_browser = input("Would you like to open these profiles in your browser? (yes/no): ").strip().lower()
+        if open_in_browser == "yes" or "y":
+            for user in result_set:
+                webbrowser.open(f"https://www.instagram.com/{user}", new=2)
