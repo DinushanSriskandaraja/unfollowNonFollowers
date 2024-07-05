@@ -21,45 +21,52 @@ def extract_usernames(html_content):
     return [a_tag.text.strip() for a_tag in soup.find_all('a', href=True)]
 
 
-def compare_lists(followers_file, following_file, option):
-    followers_content = read_html_file(followers_file)
-    following_content = read_html_file(following_file)
+def get_usernames_set(file_path):
+    content = read_html_file(file_path)
+    if content is None:
+        return set()
+    usernames = extract_usernames(content)
+    return set(usernames)
 
-    if followers_content is None or following_content is None:
-        return
 
-    followers_usernames = extract_usernames(followers_content)
-    following_usernames = extract_usernames(following_content)
-
-    followers_set = set(followers_usernames)
-    following_set = set(following_usernames)
-
+def identify_non_reciprocal_followers(followers_set, following_set, option):
     if option == "1":
-        # Followers not following back
         result_set = followers_set - following_set
         message = "Followers not following back:"
     elif option == "2":
-        # Following not followers
         result_set = following_set - followers_set
         message = "Following not followers:"
     else:
         print("Invalid option selected.")
-        return
+        return None, None
 
+    return result_set, message
+
+
+def display_usernames(result_set, message):
     print(message)
     for user in result_set:
         print(user)
     print(f"Count: {len(result_set)}")
 
-    return list(result_set)
+
+def open_profiles_in_browser(usernames):
+    for user in usernames:
+        webbrowser.open(f"https://www.instagram.com/{user}", new=2)
 
 
 if __name__ == "__main__":
-    option = input("Please choose an option:\n1. Identify followers who are not followed by you.\n2. Identify users you are following who are not following you back.\nEnter your choice (1 or 2): ")
-    result_set = compare_lists('followers_1.html', 'following.html', option)
+    option = input(
+        "Please choose an option:\n1. Identify followers who are not followed by you.\n2. Identify users you are following who are not following you back.\nEnter your choice (1 or 2): ")
 
-    if result_set:
+    followers_set = get_usernames_set('followers_1.html')
+    following_set = get_usernames_set('following.html')
+
+    result_set, message = identify_non_reciprocal_followers(followers_set, following_set, option)
+
+    if result_set is not None:
+        display_usernames(result_set, message)
+
         open_in_browser = input("Would you like to open these profiles in your browser? (yes/no): ").strip().lower()
-        if open_in_browser == "yes" or "y":
-            for user in result_set:
-                webbrowser.open(f"https://www.instagram.com/{user}", new=2)
+        if open_in_browser == "yes":
+            open_profiles_in_browser(result_set)
