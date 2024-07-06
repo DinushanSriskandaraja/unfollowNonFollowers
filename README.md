@@ -1,10 +1,8 @@
-# unfollowNonFollowers
-This is a tool which i developed to identify followers thife. The person who follows us first and wait until we follow them then they unfollow us to show them as a celebrity in social medias.
-# Instagram Data Analysis with Python
+# Instagram Followers Thief Identifier
 
 ## Introduction
 
-Welcome! This repository contains a Python script to analyze your Instagram followers and following lists to identify non-reciprocal relationships. Follow the steps below to get started!
+Welcome! This repository contains a Python script designed to help you identify "followers thieves" on Instagram. A "followers thief" is someone who follows you first, waits until you follow them back, and then unfollows you to appear more popular on social media.
 
 ## Instructions
 
@@ -33,7 +31,7 @@ Welcome! This repository contains a Python script to analyze your Instagram foll
 
 2. **Move Files to Script Folder:**
    - Copy the `followers.html` and `following.html` files from the unzipped folder.
-   - Paste them into the same folder where you have saved the `instagram_reciprocity.py` script from this repository.
+   - Paste them into the same folder where you have saved the `instagram_followers_thief_identifier.py` script from this repository.
 
 ### Step 3: Run the Python Script
 
@@ -46,23 +44,23 @@ Welcome! This repository contains a Python script to analyze your Instagram foll
 
 2. **Run the Script:**
    - Open your command prompt or terminal.
-   - Navigate to the directory where you saved `instagram_reciprocity.py`.
+   - Navigate to the directory where you saved `instagram_followers_thief_identifier.py`.
      ```bash
      cd path/to/your/directory
      ```
    - Run the script:
      ```bash
-     python instagram_reciprocity.py
+     python instagram_followers_thief_identifier.py
      ```
    - Follow the prompts on the screen to choose whether to identify followers not following back or following not following you back.
 
 3. **Review Results:**
    - The script will display usernames and optionally open Instagram profiles in your browser.
 
-## Additional Information
+### Additional Information
 
+- This tool is designed to help you identify individuals who follow you, wait for you to follow back, and then unfollow you to appear more popular on social media.
 - Adjust the script settings or modify the script as needed for your specific requirements.
 - Feel free to reach out if you have any questions or feedback!
 
-Happy analyzing! 🚀🔍
-
+Happy identifying! 🚀🔍
